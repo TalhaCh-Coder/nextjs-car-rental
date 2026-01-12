@@ -1,12 +1,18 @@
-'use client'
+"use client";
 
 import React, { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { FaTruckMoving, FaUsers, FaWarehouse } from "react-icons/fa";
 import { FaRoute } from "react-icons/fa6";
+// Import AOS only on the client side
+import dynamic from "next/dynamic";
+
 function SuccessStory() {
   useEffect(() => {
+    // Import AOS only on client side
+    const AOS = require("aos");
+    import("aos/dist/aos.css");
+
+    // Initialize AOS after component mounts (client-side only)
     AOS.init({
       duration: 900,
       once: true,
@@ -39,11 +45,11 @@ function SuccessStory() {
 
   return (
     <section className="px-4 py-14">
-      
       {/* Heading */}
       <h2
         className="text-3xl md:text-4xl text-[#FFDF20] font-extrabold text-center mb-14 tracking-wide"
-        data-aos="fade-up">
+        data-aos="fade-up"
+      >
         Our Growth & Performance
       </h2>
 
@@ -53,19 +59,9 @@ function SuccessStory() {
           <div
             key={index}
             data-aos="zoom-in-up"
-            className="
-              group
-              backdrop-blur-xl
-              bg-[#1D293D]
-              p-7
-              rounded-2xl
-              shadow-lg
-              border border-white/15
-              transition-all duration-300
-            "
+            className="group backdrop-blur-xl bg-[#1D293D] p-7 rounded-2xl shadow-lg border border-white/15 transition-all duration-300"
           >
             <div className="flex flex-col items-center gap-3">
-              
               {/* Icon */}
               <div className="p-4 rounded-full transition-all duration-300">
                 {item.icon}
@@ -77,14 +73,13 @@ function SuccessStory() {
               </h3>
 
               {/* Label */}
-              <p className="text-sm text-white  font-medium tracking-wide">
+              <p className="text-sm text-white font-medium tracking-wide">
                 {item.label}
               </p>
             </div>
           </div>
         ))}
       </div>
-
     </section>
   );
 }

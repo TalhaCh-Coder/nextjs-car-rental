@@ -43,9 +43,11 @@ const Navbar = () => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-500 ease-out group-hover:w-full"></span>
               </Link>
             ))}
-            <button className="bg-yellow-400 text-white px-5 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-shadow shadow-md active:scale-95">
-              Sign In
-            </button>
+            <Link href={"/login"}>
+              <button className="bg-yellow-400 text-white px-5 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-shadow shadow-md active:scale-95">
+                Sign In
+              </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,9 +77,11 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="pt-4 px-3">
-              <button className="w-full bg-yellow-400 text-white py-3 rounded-lg font-bold hover:bg-yellow-300 transition-shadow">
-                Sign In
-              </button>
+              <Link href={"/login"}>
+                <button className="w-full bg-yellow-400 text-white py-3 rounded-lg font-bold hover:bg-yellow-300 transition-shadow">
+                  Sign In
+                </button>
+              </Link>
             </div>
           </div>
         </div>

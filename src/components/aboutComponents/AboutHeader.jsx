@@ -1,74 +1,118 @@
-'use client'
+"use client";
 
-import { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-function AboutHeader() {
+const slides = [
+  {
+    title: "Reliable Truck Booking",
+    highlight: "For Heavy Hauling",
+    desc: "Easily transport your valuable goods and heavy cargo. Professional drivers and secure transport are now just a click away.",
+    image:
+      "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1200&auto=format&fit=crop&q=80",
+  },
+  {
+    title: "Smart Logistics Solutions",
+    highlight: "Home & Office Shifting",
+    desc: "Whether you're moving your home or office equipment, our modern fleet and expert team are ready to assist you anytime.",
+    image:
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&auto=format&fit=crop&q=80",
+  },
+  {
+    title: "Fast & Secure Delivery",
+    highlight: "Anywhere in Pakistan",
+    desc: "A wide range of truck sizes is available. Ship your goods nationwide with transparent pricing and real-time live tracking.",
+    image:
+      "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dHJ1Y2tzfGVufDB8fDB8fHww",
+  },
+];
+
+export default function AboutHeader() {
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      easing: "ease-out-cubic",
-      once: true,
-    });
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
+  const prevSlide = () => {
+    setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const nextSlide = () => {
+    setIndex((prev) => (prev + 1) % slides.length);
+  };
+
   return (
-    <section className="relative h-[100vh] w-full overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Background Slider */}
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.div
+          key={slides[index].image}
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${slides[index].image})` }}
+        />
+      </AnimatePresence>
 
-      {/* Background Image */}
-      <img
-        src="https://i.pinimg.com/1200x/db/0b/42/db0b429f21c75a336bed34315889b806.jpg"
-        alt="Truck Rental"
-        className="absolute  h-full w-full object-cover"
-      />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/50 to-black/30" />
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 opacity-55 bg-[#1D293D]/80"></div>
+      {/* Left Arrow */}
+      <div
+        onClick={prevSlide}
+        className="absolute hidden lg:block left-2 z-20 bg-gray-100/25 hover:bg-gray-100/35 p-4 rounded-full cursor-pointer"
+      >
+        <ArrowLeft className="text-white" />
+      </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center text-center">
+      <div className="relative z-10 max-w-7xl w-full px-6 flex items-center justify-center text-center">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -40 }}
+            transition={{ duration: 0.6 }}
+            className="text-white"
+          >
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+              {slides[index].title}
+              <span className="block text-yellow-400">
+                {slides[index].highlight}
+              </span>
+            </h1>
+            <p className="mt-6 text-lg text-white/80 max-w-xl mx-auto">
+              {slides[index].desc}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4 items-center justify-center">
+              <button className="rounded-2xl px-8 py-3 text-base font-semibold bg-yellow-400 text-black hover:bg-yellow-300 transition">
+                Book a Truck
+              </button>
 
-        <span
-          data-aos="fade-down"
-          className="inline-block mx-auto mb-6 px-5 py-2 text-sm font-semibold tracking-wide rounded-full bg-[#FFDF20]/15 text-[#FFDF20]"
-        >
-          About Our Company
-        </span>
+              <button className="rounded-2xl px-8 py-3 text-base font-semibold border border-white/40 text-white hover:bg-white/10 transition">
+                View Our Trucks
+              </button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-        <h1
-          data-aos="fade-up"
-          data-aos-delay="150"
-          className="text-4xl md:text-6xl font-extrabold text-white leading-tight"
-        >
-          Driving Reliability in
-          <span className="block text-[#FFDF20] mt-3">
-            Truck Rental Solutions
-          </span>
-        </h1>
-
-        <p
-          data-aos="fade-up"
-          data-aos-delay="300"
-          className="mt-8 text-lg md:text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed"
-        >
-          We provide professional, safe, and cost-effective truck rental services
-          designed to keep your business moving forward — on time and without
-          compromise.
-        </p>
-
-        <div
-          data-aos="zoom-in"
-          data-aos-delay="450"
-          className="mt-12 flex justify-center"
-        >
-          <span className="h-1 w-28 rounded-full bg-[#FFDF20]"></span>
-        </div>
-
+      {/* Right Arrow */}
+      <div
+        onClick={nextSlide}
+        className="absolute hidden lg:block right-2 z-20 bg-gray-100/25 hover:bg-gray-100/35 p-4 rounded-full cursor-pointer"
+      >
+        <ArrowRight className="text-white" />
       </div>
     </section>
   );
 }
-
-export default AboutHeader;
