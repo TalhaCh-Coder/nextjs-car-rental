@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Services", href: "/services" },
+    // { name: "Services", href: "/services" },
     { name: "About Us", href: "/about" },
     { name: "Blogs", href: "/blogs" },
     { name: "Contact", href: "/contact" },
@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white fixed border-b border-gray-200 w-full z-50">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="bg-yellow-400 p-2 rounded-lg text-white text-2xl">
@@ -32,20 +32,24 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-slate-700 hover:text-yellow-400 font-semibold transition-colors group relative pb-1"
-              >
-                {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-500 ease-out group-hover:w-full"></span>
-              </Link>
-            ))}
-            <button className="bg-yellow-400 text-white px-5 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-shadow shadow-md active:scale-95">
-              Sign In
-            </button>
+          <div className="hidden md:flex items-center justify-center bg-red-400 space-x-8">
+            <div>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="text-slate-700 hover:text-yellow-400 font-semibold transition-colors group relative pb-1"
+                >
+                  {link.name}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-500 ease-out group-hover:w-full"></span>
+                </Link>
+              ))}
+            </div>
+            <Link href={"/login"}>
+              <button className="bg-yellow-400 text-white px-5 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-shadow shadow-md active:scale-95">
+                Sign In
+              </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,9 +79,11 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="pt-4 px-3">
-              <button className="w-full bg-yellow-400 text-white py-3 rounded-lg font-bold hover:bg-yellow-300 transition-shadow">
-                Sign In
-              </button>
+              <Link href={"/login"}>
+                <button className="w-full bg-yellow-400 text-white py-3 rounded-lg font-bold hover:bg-yellow-300 transition-shadow">
+                  Sign In
+                </button>
+              </Link>
             </div>
           </div>
         </div>
