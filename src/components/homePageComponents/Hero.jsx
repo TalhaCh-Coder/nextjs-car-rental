@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -30,32 +30,85 @@ const slides = [
 
 export default function Hero() {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1); // 1 for right-to-left, -1 for left-to-right
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  // Refs to track our timers
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  // Start the auto-slide functionality
+  const startAutoSlide = () => {
+    // Clear any existing interval first
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    // Set a new interval
+    intervalRef.current = setInterval(() => {
+      setDirection(1); // Auto-slide always goes right-to-left
       setIndex((prev) => (prev + 1) % slides.length);
     }, 5000);
+  };
 
-    return () => clearInterval(interval);
+  // Initialize auto-slide on component mount
+  useEffect(() => {
+    startAutoSlide();
+
+    // Cleanup on unmount
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
+  // Handle manual navigation
+  const handleManualNavigation = (newDirection, newIndex) => {
+    // Clear the current auto-slide interval
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    // Clear any pending timeout that would restart auto-slide
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    // Update direction and index
+    setDirection(newDirection);
+    setIndex(newIndex);
+
+    // Set a timeout to restart auto-slide after 5 seconds of inactivity
+    timeoutRef.current = setTimeout(() => {
+      startAutoSlide();
+    }, 5000);
+  };
+
   const prevSlide = () => {
-    setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+    const newIndex = (index - 1 + slides.length) % slides.length;
+    handleManualNavigation(-1, newIndex);
   };
 
   const nextSlide = () => {
-    setIndex((prev) => (prev + 1) % slides.length);
+    const newIndex = (index + 1) % slides.length;
+    handleManualNavigation(1, newIndex);
+  };
+
+  // Animation variants based on direction
+  const slideVariants = {
+    incoming: (direction) => ({
+      x: direction > 0 ? "100%" : "-100%",
+    }),
+    active: { x: 0 },
+    outgoing: (direction) => ({
+      x: direction > 0 ? "-100%" : "100%",
+    }),
   };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
       {/* Background Slider */}
-      <AnimatePresence mode="sync" initial={false}>
+      <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={slides[index].image}
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "-100%" }}
+          custom={direction}
+          variants={slideVariants}
+          initial="incoming"
+          animate="active"
+          exit="outgoing"
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{ backgroundImage: `url(${slides[index].image})` }}
