@@ -140,7 +140,7 @@ const TruckServiceCard = ({ service, onLearnMore }) => (
 );
 
 // Main Component for Truck Services
-export default function TruckServices() {
+export default function TruckService() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
 
